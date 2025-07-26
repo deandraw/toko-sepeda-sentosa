@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Berhasil - Toko Sepeda Sentosa</title>
+    
+   
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        
+        .success-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 3rem;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            opacity: 0.1;
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+       
+        .success-icon {
+            font-size: 5rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+            animation: bounce 0.8s ease;
+        }
+
+        .success-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .success-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+        }
+
+        
+        .order-details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .order-details h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            color: #e74c3c;
+        }
+
+        
+        .order-items {
+            margin-top: 1rem;
+        }
+
+        .order-items h4 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .item-quantity {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+
+        
+        .contact-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #e8f4f8;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            text-align: left;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            color: white;
+            font-size: 1.2rem;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .pdf-loading {
+            background: rgba(0,0,0,0.8);
+            border-radius: 10px;
+            padding: 2rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: auto;
+        }
+
+        .shop-loading {
+            background: rgba(102, 126, 234, 0.9);
+        }
+
+        .loading-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+       
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.1; 
+            }
+            50% { 
+                transform: scale(1.1); 
+                opacity: 0.05; 
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { 
+                transform: translateY(0); 
+            }
+            40% { 
+                transform: translateY(-30px); 
+            }
+            60% { 
+                transform: translateY(-15px); 
+            }
+        }
+
+        @keyframes spin {
+            0% { 
+                transform: rotate(0deg); 
+            }
+            100% { 
+                transform: rotate(360deg); 
+            }
+        }
+
+        
+        .error-icon {
+            color: #dc3545;
+        }
+
+       
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .success-container {
+                padding: 2rem;
+                margin: 0;
+            }
+
+            .success-title {
+                font-size: 2rem;
+            }
+
+            .success-icon {
+                font-size: 4rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+
+            .order-details {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .success-container {
+                padding: 1.5rem;
+            }
+
+            .success-title {
+                font-size: 1.8rem;
+            }
+
+            .success-icon {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="success-container">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        
+        <h1 class="success-title">Pembayaran Berhasil!</h1>
+        <p class="success-subtitle">Terima kasih atas pembelian Anda. Pesanan sedang diproses.</p>
+        
+       
+        <div class="order-details">
+            <h3><i class="fas fa-receipt"></i> Detail Pesanan</h3>
+            
+            <div class="detail-row">
+                <span>Nomor Pesanan:</span>
+                <span id="orderNumber">#ORD-2025-001</span>
+            </div>
+            
+            <div class="detail-row">
+                <span>Tanggal Pesanan:</span>
+                <span id="orderDate">-</span>
+            </div>
+            
+            <div class="detail-row">
+                <span>Metode Pembayaran:</span>
+                <span id="paymentMethod">-</span>
+            </div>
+            
+            <div class="detail-row">
+                <span>Total Pembayaran:</span>
+                <span id="totalAmount">Rp 0</span>
+            </div>
+            
+           
+            <div class="order-items">
+                <h4>Items Pesanan:</h4>
+                <div id="orderItemsList">
+                </div>
+            </div>
+        </div>
+
+      
+        <div class="contact-info">
+            <strong>Informasi Penting:</strong><br>
+            • Pesanan akan diproses dalam 1-2 hari kerja<br>
+            • Estimasi pengiriman 3-5 hari kerja<br>
+            • Konfirmasi pengiriman akan dikirim via email<br>
+            • Hubungi kami di +62 812 3456 7890 untuk pertanyaan
+        </div>
+
+      
+        <div class="button-group">
+            <button onclick="shopAgain()" class="btn btn-primary">
+                <i class="fas fa-shopping-cart"></i> Belanja Lagi
+            </button>
+            <button onclick="generatePDF()" class="btn btn-secondary">
+                <i class="fas fa-file-pdf"></i> Cetak PDF
+            </button>
+            <button onclick="printOrder()" class="btn btn-secondary">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+    </div>
+
+    
+    <div id="pdfLoading" class="loading-overlay pdf-loading">
+        <div style="text-align: center;">
+            <i class="fas fa-spinner loading-icon"></i>
+            <div>Membuat PDF...</div>
+        </div>
+    </div>
+
+    <div id="shopLoading" class="loading-overlay shop-loading">
+        <i class="fas fa-spinner loading-icon"></i>
+        <div>Mengarahkan ke halaman belanja...</div>
+        <div style="margin-top: 0.5rem; font-size: 0.9rem;">Mohon tunggu sebentar</div>
+    </div>
+
+    <script>
+        
+        let currentOrderData = null;
+
+       
+        function getOrderData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderData = urlParams.get('order');
+            
+            if (orderData) {
+                try {
+                    return JSON.parse(decodeURIComponent(orderData));
+                } catch (error) {
+                    console.error('Error parsing order data:', error);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        function displayOrderDetails() {
+            const orderData = getOrderData();
+            
+            if (!orderData) {
+                showErrorState();
+                return;
+            }
+
+            currentOrderData = orderData;
+            populateOrderInfo(orderData);
+            populateOrderItems(orderData);
+        }
+
+        function showErrorState() {
+            document.querySelector('.success-container').innerHTML = `
+                <div class="success-icon error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h1 class="success-title">Data Pesanan Tidak Ditemukan</h1>
+                <p class="success-subtitle">Terjadi kesalahan dalam memuat data pesanan.</p>
+                <div class="button-group">
+                    <button onclick="shopAgain()" class="btn btn-primary">Kembali ke Beranda</button>
+                </div>
+            `;
+        }
+
+        function populateOrderInfo(orderData) {
+            const orderNumber = generateOrderNumber();
+            const orderDate = new Date(orderData.orderDate).toLocaleDateString('id-ID');
+            const paymentMethod = getPaymentMethodName(orderData.payment);
+            const total = calculateTotal(orderData.items);
+            
+            document.getElementById('orderNumber').textContent = orderNumber;
+            document.getElementById('orderDate').textContent = orderDate;
+            document.getElementById('paymentMethod').textContent = paymentMethod;
+            document.getElementById('totalAmount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function populateOrderItems(orderData) {
+            const orderItemsList = document.getElementById('orderItemsList');
+            orderItemsList.innerHTML = '';
+            
+            orderData.items.forEach(item => {
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">Qty: ${item.quantity}</div>
+                    </div>
+                    <div class="item-price">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</div>
+                `;
+                orderItemsList.appendChild(orderItem);
+            });
+        }
+
+       
+        function generateOrderNumber() {
+            const year = new Date().getFullYear();
+            const randomNum = Math.floor(Math.random() * 10000).toString().padStart(3, '0');
+            return `#ORD-${year}-${randomNum}`;
+        }
+
+        function getPaymentMethodName(method) {
+            const methods = {
+                'transfer': 'Transfer Bank',
+                'cod': 'Cash on Delivery (COD)',
+                'ewallet': 'E-Wallet',
+                'credit': 'Kartu Kredit'
+            };
+            return methods[method] || method;
+        }
+
+        function calculateTotal(items) {
+            const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 50000;
+            const tax = subtotal * 0.1;
+            return subtotal + shipping + tax;
+        }
+
+        function clearStorage() {
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('orderData');
+                    sessionStorage.clear();
+                }
+            } catch (error) {
+                console.log('Storage clear error (not critical):', error);
+            }
+        }
+
+        
+        function shopAgain() {
+            try {
+                console.log('Redirecting to shop...');
+                
+                const loadingOverlay = document.getElementById('shopLoading');
+                loadingOverlay.classList.add('show');
+                
+                clearStorage();
+
+                setTimeout(() => {
+                    try {
+                        window.location.href = 'index2.html';
+                        
+                       
+                        setTimeout(() => window.location.replace('index2.html'), 500);
+                        setTimeout(() => window.location = 'index2.html', 1000);
+                        
+                    } catch (redirectError) {
+                        console.error('Redirect error:', redirectError);
+                        handleRedirectError(loadingOverlay);
+                    }
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error in shopAgain function:', error);
+                handleShopAgainError();
+            }
+        }
+
+        function handleRedirectError(loadingOverlay) {
+            loadingOverlay.classList.remove('show');
+            alert('Mengarahkan ke halaman utama...');
+            window.location.href = window.location.origin + '/index2.html';
+        }
+
+        function handleShopAgainError() {
+            const loadingOverlay = document.getElementById('shopLoading');
+            if (loadingOverlay) {
+                loadingOverlay.classList.remove('show');
+            }
+            
+            try {
+                window.location.href = 'index2.html';
+            } catch (fallbackError) {
+                alert('Terjadi kesalahan. Silakan refresh halaman dan navigasi manual ke halaman utama.');
+                console.error('Ultimate fallback needed:', fallbackError);
+            }
+        }
+
+        function generatePDF() {
+            if (!currentOrderData) {
+                alert('Data pesanan tidak tersedia!');
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('pdfLoading');
+            loadingOverlay.classList.add('show');
+
+            setTimeout(() => {
+                try {
+                    createPDFDocument();
+                    loadingOverlay.classList.remove('show');
+                    alert('PDF berhasil dibuat dan diunduh!');
+                } catch (error) {
+                    console.error('Error generating PDF:', error);
+                    loadingOverlay.classList.remove('show');
+                    handlePDFError();
+                }
+            }, 500);
+        }
+
+        function createPDFDocument() {
+            if (typeof window.jspdf === 'undefined') {
+                throw new Error('jsPDF library not loaded');
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            
+            doc.setFontSize(20);
+            doc.setTextColor(40, 40, 40);
+            doc.text('TOKO SEPEDA SENTOSA', 20, 20);
+            
+            doc.setFontSize(16);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Struk Pembayaran', 20, 30);
+            
+           
+            doc.setLineWidth(0.5);
+            doc.line(20, 35, 190, 35);
+            
+            
+            addOrderDetailsToPDF(doc);
+            addOrderItemsToPDF(doc);
+            addTotalToPDF(doc);
+            addFooterToPDF(doc);
+            
+           
+            const orderNumber = document.getElementById('orderNumber').textContent;
+            const fileName = 'Struk-Pembelian-' + orderNumber.replace('#', '') + '.pdf';
+            doc.save(fileName);
+        }
+
+        function addOrderDetailsToPDF(doc) {
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            const orderNumber = document.getElementById('orderNumber').textContent;
+            const orderDate = document.getElementById('orderDate').textContent;
+            const paymentMethod = document.getElementById('paymentMethod').textContent;
+            
+            doc.text('Nomor Pesanan: ' + orderNumber, 20, 50);
+            doc.text('Tanggal Pesanan: ' + orderDate, 20, 60);
+            doc.text('Metode Pembayaran: ' + paymentMethod, 20, 70);
+        }
+
+        function addOrderItemsToPDF(doc) {
+            doc.setFontSize(14);
+            doc.setTextColor(40, 40, 40);
+            doc.text('Detail Pesanan:', 20, 90);
+            
+           
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Nama Produk', 20, 100);
+            doc.text('Qty', 120, 100);
+            doc.text('Harga', 140, 100);
+            doc.text('Subtotal', 170, 100);
+            
+            doc.line(20, 102, 190, 102);
+            
+           
+            let yPosition = 110;
+            currentOrderData.items.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                
+                doc.setFontSize(9);
+                doc.setTextColor(40, 40, 40);
+                doc.text(item.name, 20, yPosition);
+                doc.text(item.quantity.toString(), 120, yPosition);
+                doc.text('Rp ' + item.price.toLocaleString('id-ID'), 140, yPosition);
+                doc.text('Rp ' + itemTotal.toLocaleString('id-ID'), 170, yPosition);
+                
+                yPosition += 10;
+            });
+            
+            return yPosition;
+        }
+
+        function addTotalToPDF(doc) {
+            let yPosition = 110 + (currentOrderData.items.length * 10) + 10;
+            
+            doc.line(20, yPosition, 190, yPosition);
+            yPosition += 10;
+            
+            const subtotal = currentOrderData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 50000;
+            const tax = subtotal * 0.1;
+            const finalTotal = subtotal + shipping + tax;
+            
+            doc.text('Subtotal:', 120, yPosition);
+            doc.text('Rp ' + subtotal.toLocaleString('id-ID'), 170, yPosition);
+            yPosition += 10;
+            
+            doc.text('Ongkos Kirim:', 120, yPosition);
+            doc.text('Rp ' + shipping.toLocaleString('id-ID'), 170, yPosition);
+            yPosition += 10;
+            
+            doc.text('Pajak (10%):', 120, yPosition);
+            doc.text('Rp ' + tax.toLocaleString('id-ID'), 170, yPosition);
+            yPosition += 10;
+            
+            doc.setFontSize(12);
+            doc.setTextColor(231, 76, 60);
+            doc.text('TOTAL:', 120, yPosition);
+            doc.text('Rp ' + finalTotal.toLocaleString('id-ID'), 170, yPosition);
+        }
+
+        function addFooterToPDF(doc) {
+            const yPosition = 110 + (currentOrderData.items.length * 10) + 70;
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Terima kasih atas pembelian Anda!', 20, yPosition);
+            doc.text('Hubungi kami di +62 812 3456 7890 untuk pertanyaan.', 20, yPosition + 10);
+        }
+
+        function handlePDFError() {
+            if (confirm('Gagal membuat PDF. Apakah Anda ingin mencetak halaman ini?')) {
+                window.print();
+            }
+        }
+
+        function printOrder() {
+            try {
+                const printWindow = window.open('', '_blank');
+                const printContent = generatePrintContent();
+                
+                printWindow.document.write(printContent);
+                printWindow.document.close();
+                printWindow.print();
+                
+            } catch (error) {
+                console.error('Error in printOrder:', error);
+                alert('Terjadi kesalahan saat mencetak. Silakan coba lagi.');
+            }
+        }
+
+        function generatePrintContent() {
+            const orderNumber = document.getElementById('orderNumber').textContent;
+            const orderDate = document.getElementById('orderDate').textContent;
+            const paymentMethod = document.getElementById('paymentMethod').textContent;
+            const totalAmount = document.getElementById('totalAmount').textContent;
+            
+            let itemsHTML = '';
+            if (currentOrderData && currentOrderData.items) {
+                currentOrderData.items.forEach(item => {
+                    itemsHTML += `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>${item.quantity}</td>
+                            <td>Rp ${item.price.toLocaleString('id-ID')}</td>
+                            <td>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            return `
+                <html>
+                <head>
+                    <title>Struk Pembayaran</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
+                        .details { margin: 20px 0; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .total { font-weight: bold; }
+                        .footer { margin-top: 30px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>TOKO SEPEDA SENTOSA</h1>
+                        <h2>Struk Pembayaran</h2>
+                    </div>
+                    <div class="details">
+                        <p><strong>Nomor Pesanan:</strong> ${orderNumber}</p>
+                        <p><strong>Tanggal Pesanan:</strong> ${orderDate}</p>
+                        <p><strong>Metode Pembayaran:</strong> ${paymentMethod}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama Produk</th>
+                                <th>Qty</th>
+                                <th>Harga</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHTML}
+                        </tbody>
+                    </table>
+                    <div class="total">
+                        <p><strong>Total Pembayaran: ${totalAmount}</strong></p>
+                    </div>
+                    <div class="footer">
+                        <p>Terima kasih atas pembelian Anda!</p>
+                        <p>Hubungi kami di +62 812 3456 7890 untuk pertanyaan.</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+       
+        document.addEventListener('DOMContentLoaded', function() {
+            displayOrderDetails();
+            console.log('Payment success page loaded');
+            console.log('Current URL:', window.location.href);
+        });
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+              
+                const shopLoading = document.getElementById('shopLoading');
+                const pdfLoading = document.getElementById('pdfLoading');
+                
+                if (shopLoading) shopLoading.classList.remove('show');
+                if (pdfLoading) pdfLoading.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

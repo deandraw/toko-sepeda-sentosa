@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Sepeda Sentosa - Sepeda Berkualitas Terpercaya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-bicycle"></i> Toko Sepeda Sentosa
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#products">Produk</a></li>
+                    <li><a href="#about">Tentang Kami</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Sepeda Berkualitas untuk Petualangan Anda</h1>
+            <p>Temukan koleksi sepeda terbaik dengan kualitas premium dan harga terjangkau. Terpercaya sejak 2010.</p>
+            <a href="#products" class="cta-button">Jelajahi Produk</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="filter-section" id="products">
+            <h2 class="filter-title">Kategori Sepeda</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterProducts('all')">Semua Produk</button>
+                <button class="filter-btn" onclick="filterProducts('gunung')">Sepeda Gunung</button>
+                <button class="filter-btn" onclick="filterProducts('lipat')">Sepeda Lipat</button>
+                <button class="filter-btn" onclick="filterProducts('road')">Sepeda Road</button>
+                <button class="filter-btn" onclick="filterProducts('anak')">Sepeda Anak</button>
+            </div>
+        </section>
+
+        <div class="product-grid" id="productGrid">
+        </div>
+    </div>
+
+    <section id="about" class="container">
+        <div class="filter-section">
+            <h2 class="filter-title">Tentang Toko Sepeda Sentosa</h2>
+            <p>Toko Sepeda Sentosa telah melayani pecinta sepeda di Indonesia sejak 2010. Kami berkomitmen untuk menyediakan sepeda berkualitas tinggi dengan pelayanan terbaik. Dengan pengalaman lebih dari 15 tahun, kami memahami kebutuhan setiap pelanggan dan menawarkan solusi terbaik untuk setiap petualangan bersepeda Anda.</p>
+            <div style="margin-top: 2rem; text-align: center;">
+                <h3>Deandra Wahyudrian</h3>
+                <p>Pemilik & Founder</p>
+                <p>Email: deandra.10521054@gmail.com</p>
+                <p>Nim: 10521054</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Kontak Kami</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Jl. Pasar Baru No. 88, Majalaya</p>
+                <p><i class="fas fa-phone"></i> +62 812 3456 7890</p>
+                <p><i class="fas fa-envelope"></i> deandra.10521054@gmail.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Jam Operasional</h3>
+                <p>Senin - Jumat: 08:00 - 17:00</p>
+                <p>Sabtu: 08:00 - 15:00</p>
+                <p>Minggu: Tutup</p>
+            </div>
+            <div class="footer-section">
+                <h3>Ikuti Kami</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #34495e; padding-top: 1rem; margin-top: 2rem;">
+            <p>&copy; 2025 Toko Sepeda Sentosa. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Keranjang Belanja</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: Rp 0</div>
+            <button class="btn-primary" onclick="checkout()" style="width: 100%; margin-top: 1rem;">
+                Checkout
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

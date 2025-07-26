@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Toko Sepeda Sentosa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .checkout-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .checkout-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkout-header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .checkout-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .order-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info h4 {
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-info p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+
+        .total-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-row.final {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e74c3c;
+            border-top: 1px solid #eee;
+            padding-top: 0.5rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #667eea;
+        }
+
+        .payment-option.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .payment-option input[type="radio"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkout-header">
+            <h1><i class="fas fa-bicycle"></i> Checkout</h1>
+            <p>Lengkapi informasi pembelian Anda</p>
+        </div>
+
+        <div class="checkout-content">
+            <div class="checkout-form">
+                <form id="checkoutForm">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Informasi Pelanggan</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Nama Depan *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Nama Belakang *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Nomor Telepon *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-map-marker-alt"></i> Alamat Pengiriman</h3>
+                        <div class="form-group">
+                            <label for="address">Alamat Lengkap *</label>
+                            <textarea id="address" name="address" rows="3" required placeholder="Masukkan alamat lengkap termasuk nama jalan, nomor rumah"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">Kota *</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postalCode">Kode Pos *</label>
+                                <input type="text" id="postalCode" name="postalCode" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="province">Provinsi *</label>
+                            <select id="province" name="province" required>
+                                <option value="">Pilih Provinsi</option>
+                                <option value="Jawa Barat">Jawa Barat</option>
+                                <option value="Jawa Tengah">Jawa Tengah</option>
+                                <option value="Jawa Timur">Jawa Timur</option>
+                                <option value="DKI Jakarta">DKI Jakarta</option>
+                                <option value="Banten">Banten</option>
+                                <option value="Yogyakarta">Yogyakarta</option>
+                                <option value="Sumatra Utara">Sumatra Utara</option>
+                                <option value="Sumatra Barat">Sumatra Barat</option>
+                                <option value="Bali">Bali</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-credit-card"></i> Metode Pembayaran</h3>
+                        <div class="payment-methods">
+                            <div class="payment-option">
+                                <input type="radio" id="transfer" name="payment" value="transfer" required>
+                                <label for="transfer">Transfer Bank</label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="cod" name="payment" value="cod" required>
+                                <label for="cod">COD</label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="ewallet" name="payment" value="ewallet" required>
+                                <label for="ewallet">E-Wallet</label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="credit" name="payment" value="credit" required>
+                                <label for="credit">Kartu Kredit</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><i class="fas fa-sticky-note"></i> Catatan Tambahan</h3>
+                        <div class="form-group">
+                            <label for="notes">Catatan untuk penjual (opsional)</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Masukkan catatan khusus untuk pesanan Anda"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-lock"></i> Proses Pembayaran
+                    </button>
+                </form>
+
+                <div class="loading" id="loadingSection">
+                    <i class="fas fa-spinner"></i>
+                    <p>Memproses pembayaran...</p>
+                </div>
+            </div>
+            <div class="order-summary">
+                <h3><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h3>
+                <div id="orderItems">
+                </div>
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">Rp 0</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Ongkos Kirim:</span>
+                        <span id="shipping">Rp 50.000</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Pajak (10%):</span>
+                        <span id="tax">Rp 0</span>
+                    </div>
+                    <div class="total-row final">
+                        <span>Total:</span>
+                        <span id="finalTotal">Rp 0</span>
+                    </div>
+                </div>
+                <a href="index2.html" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali Belanja
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sampleCart = [
+            {
+                name: "Sepeda Gunung MTB",
+                price: 2500000,
+                quantity: 1
+            },
+            {
+                name: "Helm Sepeda",
+                price: 150000,
+                quantity: 1
+            }
+        ];
+
+        function getCartData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cartData = urlParams.get('cart');
+            
+            if (cartData) {
+                try {
+                    return JSON.parse(decodeURIComponent(cartData));
+                } catch (e) {
+                    console.error('Error parsing cart data:', e);
+                    return sampleCart;
+                }
+            }
+            
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                try {
+                    return JSON.parse(savedCart);
+                } catch (e) {
+                    console.error('Error parsing saved cart:', e);
+                }
+            }
+            
+            return sampleCart;
+        }
+
+        function displayOrderItems() {
+            const cart = getCartData();
+            const orderItems = document.getElementById('orderItems');
+            const subtotalElement = document.getElementById('subtotal');
+            const taxElement = document.getElementById('tax');
+            const finalTotalElement = document.getElementById('finalTotal');
+
+            if (cart.length === 0) {
+                orderItems.innerHTML = '<p style="text-align: center; padding: 2rem;">Keranjang kosong</p>';
+                return;
+            }
+
+            let subtotal = 0;
+            orderItems.innerHTML = '';
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                orderItems.innerHTML += `
+                    <div class="order-item">
+                        <div class="item-info">
+                            <h4>${item.name}</h4>
+                            <p>Quantity: ${item.quantity}</p>
+                        </div>
+                        <div class="item-price">Rp ${itemTotal.toLocaleString('id-ID')}</div>
+                    </div>
+                `;
+            });
+
+            const shipping = 50000;
+            const tax = subtotal * 0.1;
+            const finalTotal = subtotal + shipping + tax;
+
+            subtotalElement.textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+            taxElement.textContent = `Rp ${tax.toLocaleString('id-ID')}`;
+            finalTotalElement.textContent = `Rp ${finalTotal.toLocaleString('id-ID')}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            displayOrderItems();
+
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const orderData = {
+                    customer: {
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone')
+                    },
+                    shipping: {
+                        address: formData.get('address'),
+                        city: formData.get('city'),
+                        postalCode: formData.get('postalCode'),
+                        province: formData.get('province')
+                    },
+                    payment: formData.get('payment'),
+                    notes: formData.get('notes'),
+                    items: getCartData(),
+                    orderDate: new Date().toISOString()
+                };
+
+                document.getElementById('checkoutForm').style.display = 'none';
+                document.getElementById('loadingSection').style.display = 'block';
+
+                setTimeout(() => {
+            
+                    const orderDataString = encodeURIComponent(JSON.stringify(orderData));
+                    window.location.href = `payment-sukses.html?order=${orderDataString}`;
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
