@@ -10,6 +10,8 @@ export async function createProduct(formData: FormData) {
     const harga = Number(formData.get('harga'));
     const stok = Number(formData.get('stok'));
     const deskripsiProduk = formData.get('deskripsiProduk') as string;
+    const spesifikasi = formData.get('spesifikasi') as string;
+    const warna = formData.get('warna') as string;
 
     let gambarUrl = '/placeholder-image.jpg';
     const file = formData.get('file-upload') as File;
@@ -42,6 +44,8 @@ export async function createProduct(formData: FormData) {
             harga,
             stok,
             deskripsiProduk,
+            spesifikasi,
+            warna,
             gambarUrl,
             images: {
                 create: galleryBase64

@@ -11,6 +11,8 @@ export async function updateProduct(formData: FormData) {
     const harga = Number(formData.get('harga'));
     const stok = Number(formData.get('stok'));
     const deskripsiProduk = formData.get('deskripsiProduk') as string;
+    const spesifikasi = formData.get('spesifikasi') as string;
+    const warna = formData.get('warna') as string;
 
     const updateData: any = {
         namaProduk,
@@ -18,6 +20,8 @@ export async function updateProduct(formData: FormData) {
         harga,
         stok,
         deskripsiProduk,
+        spesifikasi,
+        warna,
     };
 
     const removeMainImage = formData.get('remove-main-image') === 'true';

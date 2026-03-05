@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
-import { ShoppingCart, ShieldCheck, ArrowLeft, ChevronRight, PackageCheck } from 'lucide-react';
+import { ShoppingCart, ShieldCheck, ArrowLeft, ChevronRight, PackageCheck, Palette, FileText } from 'lucide-react';
 import Link from 'next/link';
 import ImageGalleryClient from './ImageGalleryClient';
 import AddToCartDetailClient from './AddToCartDetailClient';
@@ -120,25 +120,43 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                                 }} />
                             </div>
 
-                            {/* Specs and Description Tabs/Sections */}
-                            <div className="space-y-8 flex-1">
+                            {/* Specs and Description Sections */}
+                            <div className="space-y-6 flex-1">
+
+                                {/* Pilihan Warna */}
+                                {product.warna && (
+                                    <div className="animate-in fade-in duration-700 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
+                                        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
+                                            <Palette className="w-5 h-5 text-blue-500" /> Pilihan Warna
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {product.warna.split(',').map((w: string, idx: number) => (
+                                                <span key={idx} className="px-3 py-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm font-medium text-zinc-700 dark:text-zinc-300 shadow-sm">
+                                                    {w.trim()}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Spesifikasi Utama */}
                                 {specsList.length > 0 && (
-                                    <div className="animate-in fade-in duration-700">
-                                        <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2 mb-4">
+                                    <div className="animate-in fade-in duration-700 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
+                                        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
                                             <ShieldCheck className="w-5 h-5 text-blue-500" /> Spesifikasi Utama
                                         </h3>
                                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                                             {specsList.map((spec: string, idx: number) => {
                                                 const [key, val] = spec.split(':');
                                                 return (
-                                                    <li key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 text-sm pb-2 border-b border-zinc-100 border-dashed">
+                                                    <li key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 text-sm pb-2 border-b border-zinc-200 dark:border-zinc-800 border-dashed">
                                                         {val ? (
                                                             <>
-                                                                <span className="font-semibold text-zinc-700 min-w-[100px]">{key.trim()}</span>
-                                                                <span className="text-zinc-500 flex-1">{val.trim()}</span>
+                                                                <span className="font-semibold text-zinc-700 dark:text-zinc-300 min-w-[100px]">{key.trim()}</span>
+                                                                <span className="text-zinc-500 dark:text-zinc-400 flex-1">{val.trim()}</span>
                                                             </>
                                                         ) : (
-                                                            <span className="text-zinc-600 whitespace-pre-wrap">{spec.trim()}</span>
+                                                            <span className="text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap">{spec.trim()}</span>
                                                         )}
                                                     </li>
                                                 );
@@ -147,10 +165,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                                     </div>
                                 )}
 
-                                <div>
-                                    <h3 className="text-lg font-bold text-zinc-900 mb-3">Deskripsi Produk</h3>
-                                    <div className="prose prose-zinc prose-sm sm:prose-base max-w-none text-zinc-600 leading-relaxed whitespace-pre-wrap">
-                                        {product.deskripsiProduk ? product.deskripsiProduk : "Belum ada deskripsi untuk produk ini."}
+                                {/* Deskripsi Produk */}
+                                <div className="animate-in fade-in duration-700 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
+                                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-3">
+                                        <FileText className="w-5 h-5 text-blue-500" /> Deskripsi Produk
+                                    </h3>
+                                    <div className="prose prose-zinc dark:prose-invert prose-sm sm:prose-base max-w-none text-zinc-600 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">
+                                        {product.deskripsiProduk ? product.deskripsiProduk : "Belum ada deskripsi spesifik untuk produk ini."}
                                     </div>
                                 </div>
                             </div>

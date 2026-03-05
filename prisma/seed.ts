@@ -42,6 +42,13 @@ async function main() {
         },
     });
 
+    const categorySepedaAnak = await prisma.category.create({
+        data: {
+            namaKategori: 'Sepeda Anak (TrainingWheels)',
+            deskripsi: 'Sepeda roda dua yang di lengkapi roda bantu kecil .',
+        },
+    });
+
     const categoryAksesoris = await prisma.category.create({
         data: {
             namaKategori: 'Aksesoris',

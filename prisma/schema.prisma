@@ -36,6 +36,7 @@ model Product {
   deskripsiProduk String?       @map("deskripsi_produk")
   harga           Float
   stok            Int           @default(0)
+  warna           String?
   gambarUrl       String?       @map("gambar_url")
   spesifikasi     String?
   orderDetails    OrderDetail[]

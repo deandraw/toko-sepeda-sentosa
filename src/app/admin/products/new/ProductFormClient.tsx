@@ -157,15 +157,43 @@ export default function ProductFormClient({ categories }: { categories: Category
 
                     <div className="space-y-2">
                         <label htmlFor="deskripsiProduk" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                            Spesifikasi / Deskripsi
+                            Deskripsi Produk
                         </label>
                         <textarea
                             id="deskripsiProduk"
                             name="deskripsiProduk"
-                            rows={4}
-                            placeholder="Tuliskan detail spesifikasi, warna, tipe transmisi, dll."
+                            rows={3}
+                            placeholder="Tuliskan deskripsi singkat mengenai produk ini."
                             className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all resize-y dark:text-zinc-100"
                         ></textarea>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label htmlFor="warna" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                Pilihan Warna <span className="text-zinc-400 font-normal">(opsional)</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="warna"
+                                name="warna"
+                                placeholder="Cth: Merah, Hitam Doff, Putih"
+                                className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all dark:text-zinc-100"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="spesifikasi" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                Spesifikasi Utama <span className="text-zinc-400 font-normal">(opsional)</span>
+                            </label>
+                            <textarea
+                                id="spesifikasi"
+                                name="spesifikasi"
+                                rows={4}
+                                placeholder="Gunakan format per baris:&#10;Frame: ALX Alloy&#10;Fork: Suntour XCM&#10;Groupset: Shimano Altus"
+                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all resize-y dark:text-zinc-100"
+                            ></textarea>
+                        </div>
                     </div>
                 </div>
 
