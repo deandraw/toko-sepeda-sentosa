@@ -43,7 +43,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         galleryImages.push({ id: 'main', url: product.gambarUrl });
     }
     // Append additional product images
-    product.images.forEach(img => {
+    product.images.forEach((img: any) => {
         galleryImages.push({ id: img.id, url: img.url });
     });
 
@@ -54,7 +54,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
     // Formatting specifications
     // If Admin used newlines, we convert them to an array for a neat list
-    const specsList = product.spesifikasi ? product.spesifikasi.split('\n').filter(s => s.trim() !== '') : [];
+    const specsList = product.spesifikasi ? product.spesifikasi.split('\n').filter((s: string) => s.trim() !== '') : [];
 
     return (
         <div className="bg-zinc-50 min-h-screen pb-20">
@@ -128,7 +128,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                                             <ShieldCheck className="w-5 h-5 text-blue-500" /> Spesifikasi Utama
                                         </h3>
                                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                                            {specsList.map((spec, idx) => {
+                                            {specsList.map((spec: string, idx: number) => {
                                                 const [key, val] = spec.split(':');
                                                 return (
                                                     <li key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 text-sm pb-2 border-b border-zinc-100 border-dashed">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { User } from '../../../../src/generated/prisma';
+import { User } from '@prisma/client';
 import { updateAdminSettings } from './actions';
 import { Settings, Save, Key, User as UserIcon, MapPin, Phone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -57,8 +57,8 @@ export default function SettingsClient({ admin }: { admin: User }) {
 
             {message.text && (
                 <div className={`p-4 rounded-xl text-sm font-medium border ${message.type === 'success'
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
-                        : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                    : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20'
                     }`}>
                     {message.text}
                 </div>

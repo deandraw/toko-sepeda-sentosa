@@ -65,7 +65,7 @@ export async function createOnlineOrder(cartItems: CartItemInput[], paymentMetho
         const statusPesanan = 'Menunggu Pembayaran'; // Will be updated by Admin later
 
         // Use Prisma Transaction to ensure atomic consistency
-        const order = await prisma.$transaction(async (tx) => {
+        const order = await prisma.$transaction(async (tx: any) => {
             // 1. Create Order Master
             const newOrder = await tx.order.create({
                 data: {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Product, Category } from '../../../../src/generated/prisma';
+import { Product, Category } from '@prisma/client';
 import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Printer, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 

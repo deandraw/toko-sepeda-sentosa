@@ -1,9 +1,7 @@
-import { PrismaClient } from '../generated/prisma';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
-    const adapter = new PrismaBetterSqlite3({ url: 'file:./dev.db' });
-    return new PrismaClient({ adapter });
+    return new PrismaClient();
 };
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;

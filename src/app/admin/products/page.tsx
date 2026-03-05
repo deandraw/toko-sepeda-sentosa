@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma';
 import { Package, Plus, Search, Edit2, Trash2, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Product, Category } from '../../../../src/generated/prisma';
+import { Product, Category } from '@prisma/client';
 
 import ProductListClient from './ProductListClient';
 

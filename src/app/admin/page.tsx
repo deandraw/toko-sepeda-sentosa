@@ -29,7 +29,7 @@ export default async function Home() {
     where: { statusPesanan: 'Selesai' }
   });
 
-  const totalRevenue = allCompletedOrders.reduce((sum, order) => sum + order.totalHarga, 0);
+  const totalRevenue = allCompletedOrders.reduce((sum: number, order: any) => sum + order.totalHarga, 0);
 
   // 2. Fetch Chart Data (Last 7 Days)
   const sevenDaysAgo = subDays(today, 6);
@@ -53,13 +53,13 @@ export default async function Home() {
     const dayStart = startOfDay(day);
     const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
 
-    const dayOrders = recentOrders.filter(o =>
+    const dayOrders = recentOrders.filter((o: any) =>
       o.tanggalPesanan >= dayStart && o.tanggalPesanan < dayEnd
     );
 
     return {
       nama: dayName,
-      total: dayOrders.reduce((sum, o) => sum + o.totalHarga, 0)
+      total: dayOrders.reduce((sum: number, o: any) => sum + o.totalHarga, 0)
     };
   });
 
@@ -159,7 +159,7 @@ export default async function Home() {
             {lowStockProducts.length === 0 ? (
               <p className="text-sm text-zinc-500">Semua stok produk terpantau aman.</p>
             ) : (
-              lowStockProducts.map((product) => (
+              lowStockProducts.map((product: any) => (
                 <div key={product.id} className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex-shrink-0 flex items-center justify-center">
                     <Package className="w-6 h-6 text-zinc-400" />

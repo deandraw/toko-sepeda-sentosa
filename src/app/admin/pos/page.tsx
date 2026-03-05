@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import POSClient from './POSClient';
-import { Product, Category } from '../../../../src/generated/prisma';
+import { Product, Category } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
 export default async function POSPage() {
@@ -22,7 +22,7 @@ export default async function POSPage() {
         }
 
         // Create the order and details inside a transaction
-        const transactionResult = await prisma.$transaction(async (tx) => {
+        const transactionResult = await prisma.$transaction(async (tx: any) => {
             // 1. Create order
             const order = await tx.order.create({
                 data: {
