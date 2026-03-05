@@ -6,7 +6,9 @@ import { ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { registerUser } from '../actions';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function RegisterPage() {
+import { Suspense } from 'react';
+
+function RegisterClientForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const router = useRouter();
@@ -108,5 +110,13 @@ export default function RegisterPage() {
                 </Link>
             </div>
         </div>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center p-8"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>}>
+            <RegisterClientForm />
+        </Suspense>
     );
 }

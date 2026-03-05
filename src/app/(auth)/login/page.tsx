@@ -6,7 +6,9 @@ import { ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { loginUser } from '../actions';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+import { Suspense } from 'react';
+
+function LoginClientForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const router = useRouter();
@@ -96,5 +98,13 @@ export default function LoginPage() {
                 </Link>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center p-8"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>}>
+            <LoginClientForm />
+        </Suspense>
     );
 }
