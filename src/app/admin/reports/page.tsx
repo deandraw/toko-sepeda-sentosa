@@ -20,9 +20,11 @@ export default async function ReportsPage() {
         },
     });
 
-    const totalRevenue = orders.reduce((sum, order) => sum + order.totalHarga, 0);
-    const totalItemsSold = orders.reduce((sum, order) => {
-        return sum + order.orderDetails.reduce((itemSum, detail) => itemSum + detail.kuantitas, 0);
+    const completedOrders = orders.filter((order: any) => order.statusPesanan === 'Selesai');
+
+    const totalRevenue = completedOrders.reduce((sum: number, order: any) => sum + order.totalHarga, 0);
+    const totalItemsSold = completedOrders.reduce((sum: number, order: any) => {
+        return sum + order.orderDetails.reduce((itemSum: number, detail: any) => itemSum + detail.kuantitas, 0);
     }, 0);
 
     return (
@@ -103,7 +105,7 @@ export default async function ReportsPage() {
                                     </td>
                                 </tr>
                             ) : (
-                                orders.map((order) => (
+                                orders.map((order: any) => (
                                     <tr key={order.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                                         <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400">
                                             {format(new Date(order.tanggalPesanan), 'dd/MM/yyyy HH:mm')}
