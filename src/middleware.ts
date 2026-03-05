@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
             const { payload } = await jwtVerify(sessionToken, SECRET_KEY);
 
             // Only admins are allowed in the /admin branch
-            if (payload.role !== 'admin') {
+            if (String(payload.role).toLowerCase() !== 'admin') {
                 return NextResponse.redirect(new URL('/', request.url));
             }
 

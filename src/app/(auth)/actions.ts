@@ -77,9 +77,9 @@ export async function loginUser(formData: FormData) {
             return { error: 'Email atau Password salah.' };
         }
 
-        await createSession(user.id, user.role, user.namaLengkap);
+        await createSession(user.id, String(user.role).toLowerCase(), user.namaLengkap);
 
-        return { success: true, user: { role: user.role } };
+        return { success: true, user: { role: String(user.role).toLowerCase() } };
     } catch (error) {
         console.error('Login Error:', error);
         return { error: 'Terjadi kesalahan sistem saat mencoba login.' };
