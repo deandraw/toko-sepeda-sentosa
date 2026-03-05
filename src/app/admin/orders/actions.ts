@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 
 export async function getAllOrders() {
     const session = await verifyUserSession();
-    if (!session.isAuthenticated || session.user?.role !== 'admin') {
+    if (!session.isAuthenticated || !session.user || (session.user.role as string)?.toLowerCase() !== 'admin') {
         return { error: 'Anda tidak memiliki akses ke halaman ini.' };
     }
 
@@ -45,7 +45,7 @@ export async function getAllOrders() {
 
 export async function updateOrderStatus(orderId: string, newStatus: string) {
     const session = await verifyUserSession();
-    if (!session.isAuthenticated || session.user?.role !== 'admin') {
+    if (!session.isAuthenticated || !session.user || (session.user.role as string)?.toLowerCase() !== 'admin') {
         return { error: 'Akses ditolak.' };
     }
 

@@ -5,7 +5,7 @@ import SettingsClient from './SettingsClient';
 
 export default async function SettingsPage() {
     const session = await verifyUserSession();
-    if (!session.isAuthenticated || session.user?.role !== 'admin') {
+    if (!session.isAuthenticated || !session.user || (session.user.role as string)?.toLowerCase() !== 'admin') {
         redirect('/login');
     }
 

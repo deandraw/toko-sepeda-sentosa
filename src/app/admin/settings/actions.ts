@@ -8,7 +8,7 @@ import { verifyUserSession } from '@/app/(auth)/verify';
 export async function updateAdminSettings(formData: FormData) {
     try {
         const session = await verifyUserSession();
-        if (!session.isAuthenticated || session.user?.role !== 'admin') {
+        if (!session.isAuthenticated || !session.user || (session.user.role as string)?.toLowerCase() !== 'admin') {
             return { error: 'Tidak memiliki akses.' };
         }
 
