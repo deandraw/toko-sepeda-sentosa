@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import POSClient from './POSClient';
 import { Product, Category } from '@prisma/client';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export default async function POSPage() {
     const products = await prisma.product.findMany({
@@ -65,6 +66,7 @@ export default async function POSPage() {
             return order;
         });
 
+        revalidatePath('/', 'layout');
         return { success: true, orderId: transactionResult.id };
     }
 

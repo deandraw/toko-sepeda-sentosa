@@ -61,9 +61,7 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
             data: { statusPesanan: newStatus }
         });
 
-        revalidatePath('/admin/orders');
-        revalidatePath('/profile'); // Revalidate profile as well so customers see the update
-        revalidatePath('/admin'); // Revalidate dashboard stats
+        revalidatePath('/', 'layout'); // Force global cache purge so Dashboard, Reports, and Profiles all update instantly
 
         return { success: true };
     } catch (error) {
