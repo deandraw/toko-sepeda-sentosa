@@ -63,6 +63,7 @@ model Order {
   totalHarga       Float         @map("total_harga")
   statusPesanan    String        @default("Menunggu Pembayaran") @map("status_pesanan")
   alamatPengiriman String?       @map("alamat_pengiriman")
+  catatan          String?
   orderDetails     OrderDetail[]
   user             User          @relation(fields: [idPengguna], references: [id])
   payments         Payment[]

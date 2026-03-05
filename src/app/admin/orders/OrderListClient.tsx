@@ -59,6 +59,14 @@ export default function OrderListClient({ initialOrders }: { initialOrders: any[
                                     <div className="font-semibold text-zinc-900 dark:text-zinc-100">{order.user.namaLengkap}</div>
                                     <div className="text-zinc-500 dark:text-zinc-400 text-xs">{order.user.noTelepon || '-'}</div>
                                     <div className="text-zinc-400 text-xs max-w-[200px] truncate mt-1" title={order.alamatPengiriman}>{order.alamatPengiriman}</div>
+                                    {order.catatan && (
+                                        <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/50 text-yellow-800 dark:text-yellow-200 text-xs rounded-lg whitespace-pre-wrap min-w-[200px]">
+                                            <span className="font-bold flex items-center gap-1 mb-1">
+                                                📝 Catatan Pembeli:
+                                            </span>
+                                            {order.catatan}
+                                        </div>
+                                    )}
                                 </td>
                                 <td className="px-6 py-4 font-bold text-blue-600 dark:text-blue-400">
                                     Rp {order.totalHarga.toLocaleString('id-ID')}

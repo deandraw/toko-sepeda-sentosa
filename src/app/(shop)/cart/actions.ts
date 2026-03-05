@@ -10,7 +10,7 @@ type CartItemInput = {
     harga: number;
 };
 
-export async function createOnlineOrder(cartItems: CartItemInput[], paymentMethod: string) {
+export async function createOnlineOrder(cartItems: CartItemInput[], paymentMethod: string, catatan?: string) {
     const session = await verifyUserSession();
 
     if (!session.isAuthenticated || !session.user?.id) {
@@ -73,6 +73,7 @@ export async function createOnlineOrder(cartItems: CartItemInput[], paymentMetho
                     totalHarga,
                     statusPesanan,
                     alamatPengiriman: userRow.alamatLengkap,
+                    catatan: catatan || null
                 }
             });
 

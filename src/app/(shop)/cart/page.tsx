@@ -16,6 +16,7 @@ export default function CartPage() {
     const [success, setSuccess] = useState(false);
     const [checkoutError, setCheckoutError] = useState('');
     const [paymentMethod, setPaymentMethod] = useState<'transfer' | 'COD'>('transfer');
+    const [catatan, setCatatan] = useState('');
     const [whatsappLink, setWhatsappLink] = useState('');
     const [copiedBank, setCopiedBank] = useState('');
     const router = useRouter();
@@ -59,7 +60,7 @@ export default function CartPage() {
                 harga: item.harga
             }));
 
-            const res = await createOnlineOrder(cartItemsInput, paymentMethod);
+            const res = await createOnlineOrder(cartItemsInput, paymentMethod, catatan);
 
             if (res.error) {
                 setCheckoutError(res.error);
@@ -75,6 +76,9 @@ export default function CartPage() {
             });
 
             messageText += `\n\n*Total Tagihan*: Rp ${res.totalHarga?.toLocaleString('id-ID')}`;
+            if (catatan) {
+                messageText += `\n*Catatan Pesanan*: ${catatan}`;
+            }
             messageText += `\n*Metode Pembayaran*: ${paymentMethod === 'transfer' ? 'Transfer Bank' : 'Cash On Delivery (COD)'}`;
 
             if (paymentMethod === 'transfer') {
@@ -232,6 +236,23 @@ export default function CartPage() {
                     )}
                     <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 sm:p-8 sticky top-24">
                         <h2 className="text-xl font-bold text-zinc-900 mb-6 pb-6 border-b border-zinc-100">Ringkasan Pesanan</h2>
+
+                        {/* Order Note (Catatan) */}
+                        <div className="mb-6 pb-6 border-b border-zinc-100">
+                            <h3 className="font-bold text-zinc-900 mb-3 flex items-center gap-2">
+                                <Check className="w-5 h-5 text-blue-500" /> Catatan Pesanan
+                            </h3>
+                            <p className="text-sm text-zinc-500 mb-4">
+                                Tuliskan pilihan warna, ukuran, atau instruksi khusus untuk admin toko di sini.
+                            </p>
+                            <textarea
+                                value={catatan}
+                                onChange={(e) => setCatatan(e.target.value)}
+                                placeholder="Contoh: Polygon Cascade warna Merah, Helm warna Hitam Doff."
+                                rows={3}
+                                className="w-full px-4 py-3 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none bg-zinc-50"
+                            />
+                        </div>
 
                         <div className="mb-6 pb-6 border-b border-zinc-100">
                             <h3 className="font-bold text-zinc-900 mb-4">Pilih Metode Pembayaran</h3>
