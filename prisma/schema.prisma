@@ -1,11 +1,94 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String  @id @default(cuid()) @map("id_pengguna")
+  namaLengkap   String  @map("nama_lengkap")
+  email         String  @unique
+  password      String
+  noTelepon     String? @map("no_telepon")
+  alamatLengkap String? @map("alamat_lengkap")
+  role          String  @default("pelanggan")
+  orders        Order[]
+
+  @@map("users")
+}
+
+model Category {
+  id           String    @id @default(cuid()) @map("id_kategori")
+  namaKategori String    @map("nama_kategori")
+  deskripsi    String?
+  products     Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id              String        @id @default(cuid()) @map("id_produk")
+  idKategori      String        @map("id_kategori")
+  namaProduk      String        @map("nama_produk")
+  deskripsiProduk String?       @map("deskripsi_produk")
+  harga           Float
+  stok            Int           @default(0)
+  gambarUrl       String?       @map("gambar_url")
+  spesifikasi     String?
+  orderDetails    OrderDetail[]
+  category        Category       @relation(fields: [idKategori], references: [id])
+  images          ProductImage[]
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(cuid()) @map("id_gambar")
+  idProduk  String  @map("id_produk")
+  url       String
+  urutan    Int     @default(0)
+  product   Product @relation(fields: [idProduk], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model Order {
+  id               String        @id @default(cuid()) @map("id_pesanan")
+  idPengguna       String        @map("id_pengguna")
+  tanggalPesanan   DateTime      @default(now()) @map("tanggal_pesanan")
+  totalHarga       Float         @map("total_harga")
+  statusPesanan    String        @default("Menunggu Pembayaran") @map("status_pesanan")
+  alamatPengiriman String?       @map("alamat_pengiriman")
+  orderDetails     OrderDetail[]
+  user             User          @relation(fields: [idPengguna], references: [id])
+  payments         Payment[]
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  id          String  @id @default(cuid()) @map("id_detail")
+  idPesanan   String  @map("id_pesanan")
+  idProduk    String  @map("id_produk")
+  kuantitas   Int
+  hargaSatuan Float   @map("harga_satuan")
+  product     Product @relation(fields: [idProduk], references: [id], onDelete: Cascade)
+  order       Order   @relation(fields: [idPesanan], references: [id])
+
+  @@map("order_details")
+}
+
+model Payment {
+  id               String   @id @default(cuid()) @map("id_pembayaran")
+  idPesanan        String   @map("id_pesanan")
+  metodePembayaran String   @map("metode_pembayaran")
+  statusPembayaran String   @default("Pending") @map("status_pembayaran")
+  tanggalBayar     DateTime @default(now()) @map("tanggal_bayar")
+  order            Order    @relation(fields: [idPesanan], references: [id])
+
+  @@map("payments")
 }
