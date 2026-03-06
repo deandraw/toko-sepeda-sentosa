@@ -18,16 +18,21 @@ export async function GET(req: NextRequest) {
     try {
         const dateSince = new Date(since);
 
-        // Count orders created STRICTLY AFTER the given exact timestamp
-        const newOrdersCount = await prisma.order.count({
+        // Fetch orders created STRICTLY AFTER the given exact timestamp
+        const newOrders = await prisma.order.findMany({
             where: {
                 tanggalPesanan: {
                     gt: dateSince
                 }
+            },
+            include: {
+                user: {
+                    select: { namaLengkap: true }
+                }
             }
         });
 
-        return NextResponse.json({ hasNewOrders: newOrdersCount > 0, count: newOrdersCount });
+        return NextResponse.json({ hasNewOrders: newOrders.length > 0, orders: newOrders });
     } catch (error) {
         console.error('Check New Orders API Error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
