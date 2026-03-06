@@ -8,9 +8,7 @@ import Link from 'next/link';
 export default async function Home() {
   // 1. Fetch Basic Stats
   const totalProducts = await prisma.product.count();
-  const activeCustomers = await prisma.user.count({
-    where: { role: 'KASIR' } // Assuming 'KASIR' represents the active users/staff
-  });
+  const activeCustomers = await prisma.user.count();
 
   const today = startOfDay(new Date());
 

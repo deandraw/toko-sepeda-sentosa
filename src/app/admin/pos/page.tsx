@@ -3,6 +3,7 @@ import POSClient from './POSClient';
 import { Product, Category } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { verifyUserSession } from '@/app/(auth)/verify';
 
 export default async function POSPage() {
     const products = await prisma.product.findMany({
@@ -17,9 +18,9 @@ export default async function POSPage() {
     async function processCheckout(cartData: { productId: string, quantity: number, price: number }[], totalAmount: number, paymentMethod: string, address?: string) {
         'use server';
 
-        const user = await prisma.user.findFirst();
-        if (!user) {
-            throw new Error("Tidak ada pengguna/kasir di database.");
+        const session = await verifyUserSession();
+        if (!session.isAuthenticated || !session.user) {
+            throw new Error("Tidak ada sesi pengguna kasir yang valid.");
         }
 
         // Create the order and details inside a transaction
@@ -27,7 +28,7 @@ export default async function POSPage() {
             // 1. Create order
             const order = await tx.order.create({
                 data: {
-                    idPengguna: user.id,
+                    idPengguna: session.user.id as string,
                     totalHarga: totalAmount,
                     statusPesanan: "Selesai",
                     alamatPengiriman: address && address.trim() !== '' ? address : "Pembelian di Toko",
