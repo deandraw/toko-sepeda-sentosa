@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ShoppingCart, Check, Minus, Plus } from 'lucide-react';
 import { useCart } from '@/components/shop/CartContext';
+import { useRouter } from 'next/navigation';
 
 interface ProductInfo {
     id: string;
@@ -17,7 +18,9 @@ export default function AddToCartDetailClient({ product }: { product: ProductInf
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [isAdding, setIsAdding] = useState(false);
+    const [isBuyingNow, setIsBuyingNow] = useState(false);
     const [success, setSuccess] = useState(false);
+    const router = useRouter();
 
     const handleMinus = () => {
         if (quantity > 1) {
@@ -54,6 +57,23 @@ export default function AddToCartDetailClient({ product }: { product: ProductInf
         }, 500); // UI feedback delay
     };
 
+    const handleBuyNow = () => {
+        if (product.stok === 0) return;
+
+        setIsBuyingNow(true);
+        addToCart({
+            id: product.id,
+            namaProduk: product.namaProduk,
+            harga: product.harga,
+            kuantitas: quantity,
+            stok: product.stok,
+            gambarUrl: product.gambarUrl,
+        });
+
+        // Immediately redirect to cart
+        router.push('/cart');
+    };
+
     const canBuy = product.stok > 0;
 
     return (
@@ -79,31 +99,46 @@ export default function AddToCartDetailClient({ product }: { product: ProductInf
                 </button>
             </div>
 
-            {/* Add to Cart Button */}
-            <button
-                onClick={handleAddToCart}
-                disabled={!canBuy || isAdding || success}
-                className={`flex-1 flex items-center justify-center gap-2 h-12 px-8 rounded-xl font-bold tracking-wide transition-all shadow-sm ${!canBuy
-                    ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
-                    : success
-                        ? 'bg-emerald-500 text-white shadow-emerald-500/30'
+            {/* Buttons Group */}
+            <div className="flex flex-col sm:flex-row w-full flex-1 gap-4">
+                {/* Add to Cart Button */}
+                <button
+                    onClick={handleAddToCart}
+                    disabled={!canBuy || isAdding || success || isBuyingNow}
+                    className={`flex-1 flex items-center justify-center gap-2 h-12 px-4 rounded-xl font-bold tracking-wide transition-all shadow-sm ${!canBuy
+                        ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+                        : success
+                            ? 'bg-emerald-500 text-white shadow-emerald-500/30'
+                            : 'bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50 hover:-translate-y-0.5'
+                        }`}
+                >
+                    {success ? (
+                        <>
+                            <Check className="w-5 h-5" /> Ditambahkan
+                        </>
+                    ) : isAdding ? (
+                        'Menambahkan...'
+                    ) : !canBuy ? (
+                        'Stok Habis'
+                    ) : (
+                        <>
+                            <ShoppingCart className="w-5 h-5" /> Keranjang
+                        </>
+                    )}
+                </button>
+
+                {/* Buy Now Button */}
+                <button
+                    onClick={handleBuyNow}
+                    disabled={!canBuy || isAdding || success || isBuyingNow}
+                    className={`flex-1 flex items-center justify-center gap-2 h-12 px-4 rounded-xl font-bold tracking-wide transition-all shadow-sm ${!canBuy
+                        ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                         : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-600/30 hover:-translate-y-0.5'
-                    }`}
-            >
-                {success ? (
-                    <>
-                        <Check className="w-5 h-5" /> Ditambahkan
-                    </>
-                ) : isAdding ? (
-                    'Menambahkan...'
-                ) : !canBuy ? (
-                    'Stok Habis'
-                ) : (
-                    <>
-                        <ShoppingCart className="w-5 h-5" />+ Masukkan Keranjang
-                    </>
-                )}
-            </button>
+                        }`}
+                >
+                    {isBuyingNow ? 'Memproses...' : !canBuy ? 'Stok Habis' : 'Beli Sekarang'}
+                </button>
+            </div>
         </div>
     );
 }
